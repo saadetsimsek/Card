@@ -7,13 +7,30 @@
 
 import UIKit
 
-final class ViewBuilder {
+final class ViewBuilder: NSObject {
     
     private let manager = ViewManager.shared
     private var card = UIView()
+    private let balance: Float = 9.999
+    private let cardNumber: Int = 1234
+    
+    private var colorCollection: UICollectionView!
+    private var imageCollection: UICollectionView!
     
     var controller: UIViewController
     var view: UIView
+    
+    var cardColor: [String] = ["#16A085FF", "#003F32FF"] {
+        willSet{
+            //
+        }
+    }
+    
+    var cardIcon: UIImage = .icon5 {
+        willSet{
+            
+        }
+    }
     
     init(controller: UIViewController, view: UIView) {
         self.controller = controller
@@ -44,7 +61,51 @@ final class ViewBuilder {
     }
 
     func getCard(){
-        card = manager.getCard(colors: <#T##[String]#>, balance: <#T##Float#>, cardNumber: <#T##Int#>, cardImage: <#T##UIImage#>)
+        card = manager.getCard(colors: cardColor,
+                               balance: balance,
+                               cardNumber: cardNumber,
+                               cardImage: cardIcon)
+        view.addSubview(card)
+        
+        NSLayoutConstraint.activate([
+            card.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            card.topAnchor.constraint(equalTo: pageTitle.bottomAnchor, constant: 30)
+        ])
+    }
+    
+    func getColorCollection(){
+        
+        let colorTitle = manager.colorSlideTitle(titleText: "Select color")
+        
+        colorCollection = manager.getCollection(id: "colors",
+                                                dataSource: self,
+                                                delagate: self)
+        colorCollection.register(ColorCollectionViewCell.self, forCellWithReuseIdentifier: ColorCollectionViewCell.identifier)
+        colorCollection.register(IconCollectionViewCell.self, forCellWithReuseIdentifier: IconCollectionViewCell.identifier)
+        
+        view.addSubview(colorTitle)
+        view.addSubview(colorCollection)
+        
+        NSLayoutConstraint.activate([
+            colorTitle.topAnchor.constraint(equalTo: card.bottomAnchor, constant: 40),
+            colorTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            colorTitle.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            
+            colorCollection.topAnchor.constraint(equalTo: colorTitle.bottomAnchor, constant: 20),
+            colorCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            colorCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
     }
 
+}
+
+extension ViewBuilder: UICollectionViewDataSource, UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return  1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ColorCollectionViewCell.identifier, for: indexPath)
+        return cell
+    }
 }

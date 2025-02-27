@@ -59,13 +59,14 @@ final class ViewManager {
             imageView.translatesAutoresizingMaskIntoConstraints = false
             imageView.widthAnchor.constraint(equalToConstant: 150).isActive = true
             imageView.heightAnchor.constraint(equalToConstant: 150).isActive = true
+            imageView.layer.opacity = 0.3
             imageView.clipsToBounds = true
             return imageView
         }()
         
         let balanceLabel = {
             let balanceLabel = UILabel()
-            balanceLabel.text = "$\(balanceLabel)"
+            balanceLabel.text = "$\(balance)"
             balanceLabel.textColor = .white
             balanceLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
             return balanceLabel
@@ -103,6 +104,40 @@ final class ViewManager {
             
         ])
         return card
+    }
+    
+    func colorSlideTitle(titleText: String) -> UILabel {
+        let sliderTitle = UILabel()
+        sliderTitle.text = titleText
+        sliderTitle.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        sliderTitle.textColor = .white
+        sliderTitle.translatesAutoresizingMaskIntoConstraints = false
+        return sliderTitle
+    }
+    
+    
+    func getCollection(id: String, dataSource: UICollectionViewDataSource, delagate: UICollectionViewDelegate) -> UICollectionView{
+        let collection: UICollectionView = {
+            let layout = UICollectionViewFlowLayout()
+            layout.scrollDirection = .horizontal
+            layout.itemSize = CGSize(width: 62, height: 62)
+            layout.minimumLineSpacing = 15
+            layout.minimumInteritemSpacing = 0
+            layout.sectionInset = UIEdgeInsets(top: 0,
+                                               left: 30,
+                                               bottom: 0,
+                                               right: 30)
+            
+            let colletionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+            colletionView.restorationIdentifier = id // Uygulama kapanıp açıldığında veya arka plana atılıp geri döndüğünde, ekranın kaldığı yerden aynı durumda yüklenmesini sağlamak için kullanılır.
+            colletionView.delegate = delagate
+            colletionView.dataSource = dataSource
+            colletionView.translatesAutoresizingMaskIntoConstraints = false
+            
+            colletionView.heightAnchor.constraint(equalToConstant: 70).isActive = true
+            return colletionView
+        }()
+        return collection
     }
     
 }

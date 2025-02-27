@@ -17,7 +17,10 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = UIColor(hex: "#141414FF")
+        
         builder.setPageTitle(title: "Desing your virtual card")
+        builder.getCard()
+        builder.getColorCollection()
     }
 
 
