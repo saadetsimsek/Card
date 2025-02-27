@@ -8,10 +8,16 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
+    private lazy var builder = {
+        return ViewBuilder(controller: self, view: self.view)
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        view.backgroundColor = UIColor(hex: "#141414FF")
+        builder.setPageTitle(title: "Desing your virtual card")
     }
 
 
