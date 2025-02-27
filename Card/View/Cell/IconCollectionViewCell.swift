@@ -13,7 +13,5 @@ class IconCollectionViewCell: UICollectionViewCell {
     
     private var imageView: UIImageView!
     
-    func setCell(colors: [String]) {
         
-    }
 }

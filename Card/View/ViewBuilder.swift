@@ -7,6 +7,10 @@
 
 import UIKit
 
+enum RestoreIDs: String {
+    case colors, image
+}
+
 final class ViewBuilder: NSObject {
     
     private let manager = ViewManager.shared
@@ -77,7 +81,7 @@ final class ViewBuilder: NSObject {
         
         let colorTitle = manager.colorSlideTitle(titleText: "Select color")
         
-        colorCollection = manager.getCollection(id: "colors",
+        colorCollection = manager.getCollection(id: RestoreIDs.colors.rawValue,
                                                 dataSource: self,
                                                 delagate: self)
         colorCollection.register(ColorCollectionViewCell.self, forCellWithReuseIdentifier: ColorCollectionViewCell.identifier)
@@ -101,11 +105,33 @@ final class ViewBuilder: NSObject {
 
 extension ViewBuilder: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return  1
+        
+       switch collectionView.restorationIdentifier{
+       case RestoreIDs.colors.rawValue:
+            return manager.colors.count
+       case RestoreIDs.image.rawValue:
+            return manager.images.count
+        default:
+            return 0
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ColorCollectionViewCell.identifier, for: indexPath)
+    /*    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ColorCollectionViewCell.identifier, for: indexPath)
         return cell
+     */
+        switch collectionView.restorationIdentifier {
+        case RestoreIDs.colors.rawValue:
+            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ColorCollectionViewCell.identifier, for: indexPath) as? ColorCollectionViewCell {
+                let colore =  manager.colors[indexPath.item]
+                cell.setCell(colors: colore)
+                return cell
+            }
+        default:
+            return UICollectionViewCell()
+        }
+        return UICollectionViewCell()
     }
 }
+
+

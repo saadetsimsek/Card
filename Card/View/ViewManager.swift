@@ -133,7 +133,8 @@ final class ViewManager {
             colletionView.delegate = delagate
             colletionView.dataSource = dataSource
             colletionView.translatesAutoresizingMaskIntoConstraints = false
-            
+            colletionView.backgroundColor = .clear
+            colletionView.showsHorizontalScrollIndicator = false
             colletionView.heightAnchor.constraint(equalToConstant: 70).isActive = true
             return colletionView
         }()
