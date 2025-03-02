@@ -27,6 +27,11 @@ final class ViewBuilder: NSObject {
     var cardColor: [String] = ["#16A085FF", "#003F32FF"] {
         willSet{
             //
+            if let colorView = view.viewWithTag(7) { // viewde tag değeri 7 olan alt görünümü arıyor
+                colorView.layer.sublayers?.remove(at: 0) // eski gradient kaldırılıyor
+                let gradient = manager.getGradient(colors: newValue)
+                colorView.layer.insertSublayer(gradient, at: 0)
+            }
         }
     }
     
@@ -132,6 +137,17 @@ extension ViewBuilder: UICollectionViewDataSource, UICollectionViewDelegate {
             return UICollectionViewCell()
         }
         return UICollectionViewCell()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        switch collectionView.restorationIdentifier {
+        case RestoreIDs.colors.rawValue:
+            let colors = manager.colors[indexPath.item]
+            self.cardColor = colors
+            
+        default:
+            return
+        }
     }
 }
 

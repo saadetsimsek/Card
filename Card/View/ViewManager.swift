@@ -42,13 +42,15 @@ final class ViewManager {
         let card = {
             let card = UIView()
             let gradient = self.getGradient(colors: colors)
-            card.layer.addSublayer(gradient)
+            card.layer.insertSublayer(gradient, at: 0)
             card.clipsToBounds = true
             card.layer.cornerRadius = 30
             card.translatesAutoresizingMaskIntoConstraints = false
+            card.tag = 7
             
             card.widthAnchor.constraint(equalToConstant: 306).isActive = true
             card.heightAnchor.constraint(equalToConstant: 175).isActive = true
+            
             
             return card
         }()
