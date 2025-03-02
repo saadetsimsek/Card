@@ -21,6 +21,7 @@ class ViewController: UIViewController {
         builder.setPageTitle(title: "Desing your virtual card")
         builder.getCard()
         builder.getColorCollection()
+        builder.setIconCollection()
         
     }
 

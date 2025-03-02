@@ -51,7 +51,6 @@ final class ViewManager {
             card.widthAnchor.constraint(equalToConstant: 306).isActive = true
             card.heightAnchor.constraint(equalToConstant: 175).isActive = true
             
-            
             return card
         }()
         
@@ -63,6 +62,7 @@ final class ViewManager {
             imageView.heightAnchor.constraint(equalToConstant: 150).isActive = true
             imageView.layer.opacity = 0.3
             imageView.clipsToBounds = true
+            imageView.tag = 8
             return imageView
         }()
         

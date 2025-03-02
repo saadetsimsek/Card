@@ -24,20 +24,23 @@ final class ViewBuilder: NSObject {
     var controller: UIViewController
     var view: UIView
     
-    var cardColor: [String] = ["#16A085FF", "#003F32FF"] {
+    var cardColor: [String] = ["#16A085FF", "#003F32FF"] { // card change select color
         willSet{
             //
             if let colorView = view.viewWithTag(7) { // viewde tag değeri 7 olan alt görünümü arıyor
                 colorView.layer.sublayers?.remove(at: 0) // eski gradient kaldırılıyor
                 let gradient = manager.getGradient(colors: newValue)
                 colorView.layer.insertSublayer(gradient, at: 0)
+              //  colorView.layer.addSublayer(gradient) // bunu dediğinde sadece renk değişir cardın üstündeki label ve imageler kaybolur
             }
         }
     }
     
     var cardIcon: UIImage = .icon5 {
         willSet{
-            
+            if let imageView = card.viewWithTag(8) as? UIImageView {
+                imageView.image = newValue
+            }
         }
     }
     
@@ -105,6 +108,27 @@ final class ViewBuilder: NSObject {
             colorCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
     }
+    
+    func setIconCollection(){
+        let iconCollectionTitle = manager.colorSlideTitle(titleText: "Add shapes")
+        imageCollection = manager.getCollection(id: RestoreIDs.image.rawValue,
+                                                dataSource: self,
+                                                delagate: self)
+        imageCollection.register(IconCollectionViewCell.self, forCellWithReuseIdentifier: IconCollectionViewCell.identifier)
+        
+        view.addSubview(iconCollectionTitle)
+        view.addSubview(imageCollection)
+        
+        NSLayoutConstraint.activate([
+            iconCollectionTitle.topAnchor.constraint(equalTo: colorCollection.bottomAnchor, constant: 40),
+            iconCollectionTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            iconCollectionTitle.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            
+            imageCollection.topAnchor.constraint(equalTo: iconCollectionTitle.bottomAnchor, constant: 20),
+            imageCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            imageCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+    }
 
 }
 //MARK: - Collectionview
@@ -133,6 +157,14 @@ extension ViewBuilder: UICollectionViewDataSource, UICollectionViewDelegate {
                 cell.setCell(colors: colore)
                 return cell
             }
+            
+        case RestoreIDs.image.rawValue:
+            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IconCollectionViewCell.identifier, for: indexPath) as? IconCollectionViewCell {
+                let icon = manager.images[indexPath.item]
+                cell.setIcon(icon: icon)
+                return cell
+            }
+
         default:
             return UICollectionViewCell()
         }
@@ -145,10 +177,29 @@ extension ViewBuilder: UICollectionViewDataSource, UICollectionViewDelegate {
             let colors = manager.colors[indexPath.item]
             self.cardColor = colors
             
+            let cell =  collectionView.cellForItem(at: indexPath) as? ColorCollectionViewCell
+            cell?.selectItem()
+            
+        case RestoreIDs.image.rawValue:
+            let image = manager.images[indexPath.item]
+            self.cardIcon = image
+            
         default:
             return
         }
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        switch collectionView.restorationIdentifier {
+        case RestoreIDs.colors.rawValue:
+            let cell = collectionView.cellForItem(at: indexPath) as? ColorCollectionViewCell
+            cell?.deselectItem()
+            
+        default:
+            return
+        }
+    }
+
 }
 
 
