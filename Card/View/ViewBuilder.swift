@@ -137,9 +137,43 @@ final class ViewBuilder: NSObject {
             label.setLineHeight(lineHeight: 10)
             label.textColor = UIColor(hex: "#6F6F6FFF")
             label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.numberOfLines = 0
             return label
         }()
         
+        view.addSubview(descriptionText)
+        
+        NSLayoutConstraint.activate([
+            descriptionText.topAnchor.constraint(equalTo: imageCollection.bottomAnchor, constant: 40),
+            descriptionText.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            descriptionText.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30)
+        ])
+    }
+    
+    func addContinueButton(){
+        let button = {
+            let button = UIButton(primaryAction: nil)
+            button.setTitle("Continue", for: .normal)
+            button.backgroundColor = .white
+            button.layer.cornerRadius = 20
+            button.setTitleColor(.black, for: .normal)
+            button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .bold)
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.layer.shadowColor = UIColor.white.cgColor
+            button.layer.shadowRadius = 10
+            button.layer.shadowOpacity = 0.5
+            return button
+        }()
+        
+        view.addSubview(button)
+        
+        NSLayoutConstraint.activate([
+            button.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            button.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            button.heightAnchor.constraint(equalToConstant: 60)
+        ])
     }
 
 }

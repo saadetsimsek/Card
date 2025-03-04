@@ -22,6 +22,8 @@ class ViewController: UIViewController {
         builder.getCard()
         builder.getColorCollection()
         builder.setIconCollection()
+        builder.setDescriptionText()
+        builder.addContinueButton()
         
     }
 
