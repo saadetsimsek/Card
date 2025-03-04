@@ -19,7 +19,7 @@ class ColorCollectionViewCell: UICollectionViewCell {
         image.isHidden = true
         image.widthAnchor.constraint(equalToConstant: 24).isActive = true
         image.heightAnchor.constraint(equalToConstant: 24).isActive = true
-        
+        image.contentMode = .scaleAspectFit
         return image
     }()
     

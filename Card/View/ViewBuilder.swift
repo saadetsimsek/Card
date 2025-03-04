@@ -184,6 +184,9 @@ extension ViewBuilder: UICollectionViewDataSource, UICollectionViewDelegate {
             let image = manager.images[indexPath.item]
             self.cardIcon = image
             
+            let cell = collectionView.cellForItem(at: indexPath) as? IconCollectionViewCell
+            cell?.selectItem()
+            
         default:
             return
         }
@@ -193,6 +196,9 @@ extension ViewBuilder: UICollectionViewDataSource, UICollectionViewDelegate {
         switch collectionView.restorationIdentifier {
         case RestoreIDs.colors.rawValue:
             let cell = collectionView.cellForItem(at: indexPath) as? ColorCollectionViewCell
+            cell?.deselectItem()
+        case RestoreIDs.image.rawValue:
+            let cell = collectionView.cellForItem(at: indexPath) as? IconCollectionViewCell
             cell?.deselectItem()
             
         default:
