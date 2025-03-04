@@ -129,6 +129,18 @@ final class ViewBuilder: NSObject {
             imageCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
+    
+    func setDescriptionText(){
+        let descriptionText : UILabel = {
+            let label = UILabel()
+            label.text = "Dont worry. You can always change the design of your virtual card later. Just enter the settings."
+            label.setLineHeight(lineHeight: 10)
+            label.textColor = UIColor(hex: "#6F6F6FFF")
+            label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+            return label
+        }()
+        
+    }
 
 }
 //MARK: - Collectionview
